@@ -15,13 +15,13 @@ var gulp = require('gulp'),
 	postcssImp = require('postcss-import'), //@import内容注入
 	htmlmin = require('gulp-htmlmin'), //html压缩插件
 	imagemin = require('gulp-imagemin'), //image压缩插件
-	rev = require('gulp-rev'),
+	rev = require('gulp-rev'), //清除缓存
 	revcollector = require('gulp-rev-collector'),
-	sequence = require('gulp-sequence'),
-	connect = require('gulp-connect'),
-	proxy = require('http-proxy-middleware'),
-	sourcemaps = require('gulp-sourcemaps'),
-	gutil = require('gulp-util')
+	sequence = require('gulp-sequence'), // 顺序执行
+	connect = require('gulp-connect'), // 本地服务器
+	proxy = require('http-proxy-middleware'), // 代理
+	sourcemaps = require('gulp-sourcemaps') // sourcemap
+	// gutil = require('gulp-util')
 
 var isPro = process.env.NODE_ENV === 'development' ? false : true
 
