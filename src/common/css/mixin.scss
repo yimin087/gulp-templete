@@ -1,0 +1,40 @@
+// px2rem
+$baseFontSize: 75;
+
+@function p2r ($px) {
+  @return $px/$baseFontSize + rem
+};
+
+// 字号
+@mixin font-dpr($font-size) { 
+  font-size: $font-size; 
+  [data-dpr="2"] & { 
+    font-size: $font-size * 2; 
+  } 
+  [data-dpr="3"] & { 
+    font-size: $font-size * 3; 
+  } 
+};
+
+/* toast */
+.toast-container {
+  position: absolute;
+  max-width: 95%;
+  z-index: 3;
+  top: 40%;
+  left: 50%;
+  padding: 35px 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+
+  .toast-message {
+    margin: 0;
+    line-height: p2r(32);
+    font-size: p2r(28);
+    color: #fff;
+    white-space: normal;
+    word-break: break-all;
+  }
+}
