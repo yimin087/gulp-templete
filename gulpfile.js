@@ -6,7 +6,7 @@ var gulp = require('gulp'),
 	amdOptimize = require('gulp-requirejs-optimize'),
 	// rename = require('gulp-rename'),
 	// concat = require('gulp-concat'), //合并插件
-	// babel = require('gulp-babel'), //es6转义
+	babel = require('gulp-babel'), //es6转义
 	uglify = require('gulp-uglify'), //js压缩插件
 	cssnano = require('gulp-cssnano'), //css压缩插件
 	sass = require('gulp-sass'), //sass文件编译
@@ -37,46 +37,26 @@ gulp.task('mjs', function() {
 		.pipe(debug({title: 'minjs编译:'}))
 		.pipe(gulp.dest('./wx/common')) //把操作好的文件放到wx/js目录下
 })
-// babel
-// gulp.task('bjs', function() {
-// 	return gulp
-// 		.src(['./src/*/babel/*.js']) //需要操作的源文件
-// 		.pipe(
-// 			babel({
-// 				presets: ['@babel/env']
-// 			})
-// 		)
-// 		.pipe(debug({title: 'bjs编译:'}))
-// 		.pipe(
-// 			// gulp.dest(function(file) {
-// 			// 	return file.path.match(/src(.+)babel/)[0].replace('babel', 'js')
-// 			// })
-// 			gulp.dest('./src')
-// 		) //把操作好的文件放到wx/js目录下
-// })
-// amdOptimize 不支持es5+
+
 gulp.task('rjs', function() {
 	return (
 		gulp
 			.src(['./src/**/*.js', '!./src/common/**/*.js'])
 			.pipe(gulpif(!isPro, sourcemaps.init()))
 			.pipe(changed('./wx', {extension: '.js'}))
-			.on('error', function(err) {
-				gutil.log(gutil.colors.red('[Error]'), err.toString())
-			})
+			.pipe(
+				babel({
+					presets: ['@babel/env']
+				})
+			)
+			.pipe(gulp.dest('./wx'))
 			.pipe(
 				amdOptimize({
 					mainConfigFile: './src/common/js/config.js'
 				})
 			)
 			.pipe(gulpif(!isPro, sourcemaps.write()))
-			.pipe(
-				gulpif(
-					isPro,
-					uglify()
-				)
-			) //压缩js文件
-
+			.pipe(gulpif(isPro,uglify())) //压缩js文件
 			.pipe(gulpif(isPro, rev()))
 			.pipe(gulp.dest('./wx')) //把操作好的文件放到wx/js目录下
 			.pipe(gulpif(isPro, rev.manifest()))
