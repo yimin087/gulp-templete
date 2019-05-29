@@ -4,8 +4,6 @@ var gulp = require('gulp'),
 	gulpif = require('gulp-if'),
 	debug = require('gulp-debug'),
 	amdOptimize = require('gulp-requirejs-optimize'),
-	// rename = require('gulp-rename'),
-	// concat = require('gulp-concat'), //合并插件
 	babel = require('gulp-babel'), //es6转义
 	uglify = require('gulp-uglify'), //js压缩插件
 	cssnano = require('gulp-cssnano'), //css压缩插件
@@ -54,6 +52,9 @@ gulp.task('rjs', function() {
 					presets: ['@babel/env']
 				})
 			)
+			.on('error', function (err) {
+				gutil.log(gutil.colors.red('[Error]'), err.toString())
+			})
 			.pipe(gulpif(!isPro, sourcemaps.write()))
 			.pipe(gulpif(isPro,uglify())) //压缩js文件
 			.pipe(gulpif(isPro, rev()))
