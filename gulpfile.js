@@ -20,8 +20,8 @@ var gulp = require('gulp'),
 	sequence = require('gulp-sequence'), // 顺序执行
 	connect = require('gulp-connect'), // 本地服务器
 	proxy = require('http-proxy-middleware'), // 代理
-	sourcemaps = require('gulp-sourcemaps') // sourcemap
-	// gutil = require('gulp-util')
+	sourcemaps = require('gulp-sourcemaps'), // sourcemap
+	gutil = require('gulp-util') //错误日志
 
 var isPro = process.env.NODE_ENV === 'development' ? false : true
 
@@ -45,14 +45,13 @@ gulp.task('rjs', function() {
 			.pipe(gulpif(!isPro, sourcemaps.init()))
 			.pipe(changed('./wx', {extension: '.js'}))
 			.pipe(
-				babel({
-					presets: ['@babel/env']
-				})
-			)
-			.pipe(gulp.dest('./wx'))
-			.pipe(
 				amdOptimize({
 					mainConfigFile: './src/common/js/config.js'
+				})
+			)
+			.pipe(
+				babel({
+					presets: ['@babel/env']
 				})
 			)
 			.pipe(gulpif(!isPro, sourcemaps.write()))
@@ -133,14 +132,14 @@ gulp.task('html', function() {
 
 gulp.task('serve', ['build'], function() {
 	connect.server({
-		root: './',
+		root: './wx',
 		livereload: true,
 		host: '0.0.0.0',
 		port: 9000,
 		middleware: function(connect, opt) {
 			return [
-				proxy('/backstage/agent', {
-					target: 'http://maptest-xwzx.xinxindai.com',
+				proxy('/api', {
+					target: 'http://api.github.com',
 					changeOrigin: true
 				})
 			]

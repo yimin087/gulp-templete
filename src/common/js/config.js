@@ -1,7 +1,7 @@
 require.config({
-	baseUrl: './src/',
+	baseUrl: './', 
 	urlArgs: new Date().getTime(),
-	optimize: "none",
+	optimize: "none",  //默认值optimize: "uglify", uglify会报错 
 	paths: {
 		jquery: './common/lib/jquery',
 		custom: './common/js/custom',
